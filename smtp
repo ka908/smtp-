@@ -1,0 +1,36 @@
+const express = require("express");
+const nodemailer = require("nodemailer");
+
+const route = express.Router();
+const app = express();
+
+const sendmail = async (req, res) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "huzaifa009428@gmail.com",
+      pass: "ldhr untp qvrq vqsi",
+    },
+  });
+
+  const mailOptions = {
+    from: "huzaifa009428@gmail.com",
+    to: "hrabnaw@gmail.com,kashif0125@hotmail.com",
+    subject: "Hello from gmail via Node.js",
+    text: "This is a  SMTP!",
+    // html: "<h1>Hello!</h1><p>This is a <b>test email</b> from gmail.</p>",
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.response);
+    res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).json({ message: "Error sending email" });
+  }
+};
+
+route.post("/sendmail", sendmail);
+
+module.exports = route;
